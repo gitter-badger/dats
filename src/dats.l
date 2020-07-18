@@ -10,7 +10,6 @@ uint32_t dats_line = 1;
 %}
 
 %s bpm
-%s note_length
 
 %%
 
@@ -18,7 +17,7 @@ uint32_t dats_line = 1;
 "BPM"               {BEGIN(bpm); return BPM;}
 "BEGIN"             {return BEG;}
 "END"               {return END;}
-"NOTE"              {BEGIN(note_length); return NOTE;}
+"NOTE"              {return NOTE;}
 
 "C"                 {printf("found C\n");
                     return C;}
@@ -35,32 +34,15 @@ uint32_t dats_line = 1;
 "B"                 {printf("found B\n");
                      return B;}
 
-
-<note_length>{      
-"1"                 {BEGIN(INITIAL);
-                     printf("found a note 1 initial %d\n", INITIAL);
-                     return NL_1;}
-"2"                 {BEGIN(INITIAL);
-                     printf("found a note 2 initial %d\n", INITIAL);
-		     return NL_2;}
-"4"                 {BEGIN(INITIAL);
-                     printf("found a note 4 initial %d\n", INITIAL);
-		     return NL_4;}
-"8"                 {BEGIN(INITIAL);
-                     printf("found a note 8 initial %d\n", INITIAL);
-                     return NL_8;}
-"16"                {BEGIN(INITIAL);
-                     printf("found a note 16 initial %d\n", INITIAL);
-                     return NL_16;}
-}
 "#"                 {return SHARP;}
 "b"                 {return FLAT;}
 
-"="                 {return EQUAL;}
 <bpm>[0-9]+(\.[0-9]+)?   {
                     yylval.dddouble = atof(yytext);
-                    BEGIN(INITIAL); printf("found bpm %s\n", yytext);
+                    BEGIN(INITIAL);
+                    printf("found bpm %s\n", yytext);
 		    return BPM_VALUE;}
+
 [0-9]+              {yylval.ddint = atoi(yytext);
                     return VALUE;}
 

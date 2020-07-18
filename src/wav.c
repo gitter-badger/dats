@@ -13,6 +13,7 @@ int dats_create_wav(void){
    FILE *fp = fopen("write.wav", "wb+");
    if (!fp){
       fprintf(stderr, "Couldn't create file!\n");
+      free(raw_PCM);
       return 1;
    }
 

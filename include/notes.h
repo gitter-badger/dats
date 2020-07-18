@@ -41,7 +41,7 @@
 #define NOTE_A5 (double) 880.00
 #define NOTE_B5 (double) 987.76
 
-uint32_t WAV_BPM;
+double   WAV_BPM;
 uint32_t WAV_ALLOC;
 uint32_t WAV_SAMPLE_RATE;
 uint32_t WAV_TIME;

@@ -1,10 +1,8 @@
 BEGIN
 
-BPM 120.0
-
 //Measure 1
-NOTE 2 C4;
-NOTE 2 G3;
+NOTE 4 C4;
+NOTE 8 G3;
 NOTE 2 A3;
 NOTE 2 E3;
 

@@ -33,6 +33,7 @@ extern uint32_t dats_line;
 
 void dats_clean(void);
 int yyerror(const char *s);
+int bpm_flag;
 %}
 
 %union {
@@ -45,7 +46,7 @@ int yyerror(const char *s);
 %token SHARP FLAT EQUAL
 
 %token <ddint> VALUE
-%token <ddouble> BPM_VALUE
+%token <dddouble> BPM_VALUE
 %token NL_1 NL_2 NL_4 NL_8 NL_16
 %token SEMICOLON
 
@@ -57,15 +58,25 @@ S : BEG notes END
 notes : bpm NOTE note_length note_key VALUE SEMICOLON
  | notes bpm NOTE note_length note_key VALUE SEMICOLON
  ;
-bpm :
- | BPM BPM_VALUE SEMICOLON
+bpm : {
+if (bpm_flag == 0) {
+   printf("warning; BPM is set to 120\n");
+   WAV_BPM = 120; 
+} 
+WAV_BPM_PERIOD = 60.0*WAV_SAMPLE_RATE/WAV_BPM;
+bpm_flag = 1;}
+ | BPM BPM_VALUE SEMICOLON {
+WAV_BPM = $2;
+WAV_BPM_PERIOD = 60.0*WAV_SAMPLE_RATE/WAV_BPM;
+bpm_flag = 1;}
  ;
-note_length : NL_1
- | NL_2
- | NL_4
- | NL_8
- | NL_16
- ;
+note_length : VALUE {
+WAV_ALLOC += WAV_BPM_PERIOD*4/(double)$1;
+raw_PCM = realloc(raw_PCM, sizeof(int16_t)*WAV_ALLOC);
+#ifdef DATS_DEBUG
+printf("nl %d at line %d ", $1, dats_line);
+#endif /*DATS_DEBUG*/
+}
 note_key : C
  | D
  | E
@@ -107,7 +118,7 @@ int main(int argc, char *argv[]){
 }
 
 int yyerror(const char *s){
-   fprintf(stderr, "parser: %s at line %d\n", s, dats_line-1);
+   fprintf(stderr, "parser: %s at line %d\n", s, dats_line);
    dats_clean();
    exit(1);
 }
