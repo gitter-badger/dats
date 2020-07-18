@@ -77,6 +77,7 @@ raw_PCM = realloc(raw_PCM, sizeof(int16_t)*WAV_ALLOC);
 printf("nl %d at line %d ", $1, dats_line);
 #endif /*DATS_DEBUG*/
 }
+ ;
 note_key : C
  | D
  | E
@@ -108,7 +109,7 @@ int main(int argc, char *argv[]){
    yyparse();
 
 #ifdef DATS_DEBUG   
-   printf("size of wav %d period bpm %f\n", 2*WAV_ALLOC, WAV_BPM_PERIOD);
+   printf("size of wav %d bytes. period bpm %f\n", 2*WAV_ALLOC, WAV_BPM_PERIOD);
 #endif
 
    fclose(yyin);
