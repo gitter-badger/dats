@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "notes.h"
 #include "wav.h"
@@ -55,15 +56,15 @@ int bpm_flag;
 %%
 S : BEG notes END
  ;
-notes : bpm NOTE note_length note_key VALUE SEMICOLON
- | notes bpm NOTE note_length note_key VALUE SEMICOLON
+notes : bpm NOTE note_length note_key octave SEMICOLON {dats_construct_pcm(0);}
+ | notes bpm NOTE note_length note_key octave SEMICOLON {dats_construct_pcm(0);}
  ;
 bpm : {
 if (bpm_flag == 0) {
    printf("warning; BPM is set to 120\n");
-   WAV_BPM = 120; 
+   WAV_BPM = 120;
+   WAV_BPM_PERIOD = 60.0*WAV_SAMPLE_RATE/WAV_BPM;
 } 
-WAV_BPM_PERIOD = 60.0*WAV_SAMPLE_RATE/WAV_BPM;
 bpm_flag = 1;}
  | BPM BPM_VALUE SEMICOLON {
 WAV_BPM = $2;
@@ -78,14 +79,15 @@ printf("nl %d at line %d ", $1, dats_line);
 #endif /*DATS_DEBUG*/
 }
  ;
-note_key : C
- | D
- | E
- | F
- | G
- | A
- | B
+note_key : C {FREQUENCY = 16.35159783;}
+ | D {FREQUENCY = 18.35404799;}
+ | E {FREQUENCY = 20.60172231;}
+ | F {FREQUENCY = 21.82676446;}
+ | G {FREQUENCY = 24.49971475;}
+ | A {FREQUENCY = 27.50;}
+ | B {FREQUENCY = 30.86770633;}
  ;
+octave : VALUE {FREQUENCY *= pow(2, $1); printf("freq %f oct %d\n", FREQUENCY, $1);}
 %%
 
 int main(int argc, char *argv[]){

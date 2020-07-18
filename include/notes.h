@@ -42,12 +42,14 @@
 #define NOTE_B5 (double) 987.76
 
 double   WAV_BPM;
+double   FREQUENCY;
+double   WAV_BPM_PERIOD;
 uint32_t WAV_ALLOC;
 uint32_t WAV_SAMPLE_RATE;
 uint32_t WAV_TIME;
 
 
+
 int16_t *raw_PCM;
-double WAV_BPM_PERIOD;
 
 #endif

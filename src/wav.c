@@ -63,6 +63,6 @@ void dats_construct_pcm(double frequency){
 #ifdef DATS_DEBUG
       printf("myb %d\n", b);
 #endif
-      raw_PCM[i] = (pow(M_E, -b*periodw*3)*23000.0*sin(2.0*M_PI*frequency*b*periodw))+pow(M_E, -b*periodw*3)*10000.0*cos(M_PI*frequency*(b+1.8)*periodw);
+      raw_PCM[i] = (pow(M_E, -b*periodw*3)*23000.0*sin(2.0*M_PI*FREQUENCY*b*periodw))+pow(M_E, -b*periodw*3)*10000.0*cos(M_PI*FREQUENCY*(b+1.8)*periodw);
    }
 }

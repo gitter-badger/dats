@@ -13,7 +13,7 @@ $(BIFLEX) : dats.y dats.l
 	$(CC) -c -I../include -O3 -o $@ $<
 
 dats : $(OBJ)
-	$(CC) -o $@ $^ -lfl -ggdb3 -O3 -lm
+	$(CC) -o $@ $^ -lfl  -ggdb3 -O3 -lm
 
 .PHONY : clean
 clean: $(OBJ) $(BIFLEX) dats
