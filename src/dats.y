@@ -26,7 +26,6 @@
 #include "notes.h"
 #include "wav.h"
 
-#define DATS_DEBUG
 extern FILE *yyin;
 extern int yylex();
 extern int yyparse();
@@ -74,7 +73,7 @@ note_length : VALUE {
 WAV_ALLOC += WAV_BPM_PERIOD*4/(double)$1;
 raw_PCM = realloc(raw_PCM, sizeof(int16_t)*WAV_ALLOC);
 #ifdef DATS_DEBUG
-printf("nl %d at line %d ", $1, dats_line);
+printf("nl %d at line %d\n", $1, dats_line);
 #endif /*DATS_DEBUG*/
 }
  ;
@@ -86,14 +85,13 @@ note_key : C {FREQUENCY = 16.35159783;}
  | A {FREQUENCY = 27.50;}
  | B {FREQUENCY = 30.86770633;}
  ;
-octave : VALUE {FREQUENCY *= pow(2, $1); printf("freq %f oct %d\n", FREQUENCY, $1);}
+octave : VALUE {FREQUENCY *= pow(2, $1);}
 %%
 
 int main(int argc, char *argv[]){
 
  
    if (argc < 2) {
-      fprintf(stdout, "ye may try \'%s [filename]\'\n", argv[0]);
       yyin = stdin;
       goto parse;
 

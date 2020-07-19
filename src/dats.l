@@ -22,19 +22,40 @@ uint32_t dats_line = 1;
 "END"               {return END;}
 "NOTE"              {return NOTE;}
 
-"C"                 {printf("found C\n");
+"C"                 {
+#ifdef DATS_DEBUG
+printf("found C\n");
+#endif
                     return C;}
-"D"                 {printf("found D\n");
+"D"                 {
+#ifdef DATS_DEBUG
+printf("found D\n");
+#endif
                      return D;}
-"E"                 {printf("found E\n");
+"E"                 {
+#ifdef DATS_DEBUG
+printf("found E\n");i
+#endif
                      return E;}
-"F"                 {printf("found F\n");
+"F"                 {
+#ifdef DATS_DEBUG
+printf("found F\n");
+#endif
                      return F;}
-"G"                 {printf("found G\n");
+"G"                 {
+#ifdef DATS_DEBUG
+printf("found G\n");
+#endif
                      return G;}
-"A"                 {printf("found A\n");
+"A"                 {
+#ifdef DATS_DEBUG
+printf("found A\n");
+#endif
                      return A;}
-"B"                 {printf("found B\n");
+"B"                 {
+#ifdef DATS_DEBUG
+printf("found B\n");
+#endif
                      return B;}
 
 "#"                 {FREQUENCY *= pow(2,1.0/12.0);}
@@ -43,7 +64,9 @@ uint32_t dats_line = 1;
 <bpm>[0-9]+(\.[0-9]+)?   {
                     yylval.dddouble = atof(yytext);
                     BEGIN(INITIAL);
-                    printf("found bpm %s\n", yytext);
+#ifdef DATS_DEBUG
+printf("found bpm %s\n", yytext);
+#endif
 		    return BPM_VALUE;}
 
 [0-9]+              {yylval.ddint = atoi(yytext);
