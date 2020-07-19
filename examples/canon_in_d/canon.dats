@@ -58,6 +58,8 @@ NOTE   8    D4;
 
 // Measure 5
 NOTE   8    E4;
+
+BPM 79.1310;
 NOTE   16   C4;
 NOTE   16   B3;
 NOTE   8    C4;

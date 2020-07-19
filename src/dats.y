@@ -43,8 +43,7 @@ int bpm_flag;
 }
 
 %token BEG BPM NOTE END
-%token C D E F G A B
-%token SHARP FLAT EQUAL
+%token C D E F G A B 
 
 %token <ddint> VALUE
 %token <dddouble> BPM_VALUE

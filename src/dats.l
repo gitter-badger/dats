@@ -3,7 +3,10 @@
 %{
 #include <stdio.h>
 #include <stdint.h>
+#include <math.h>
+
 #include "dats.tab.h"
+#include "notes.h"
 
 #define YY_DECL int yylex()
 uint32_t dats_line = 1;
@@ -34,8 +37,8 @@ uint32_t dats_line = 1;
 "B"                 {printf("found B\n");
                      return B;}
 
-"#"                 {return SHARP;}
-"b"                 {return FLAT;}
+"#"                 {FREQUENCY *= pow(2,1.0/12.0);}
+"b"                 {FREQUENCY /= pow(2,1.0/12.0);}
 
 <bpm>[0-9]+(\.[0-9]+)?   {
                     yylval.dddouble = atof(yytext);
