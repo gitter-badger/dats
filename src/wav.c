@@ -7,6 +7,8 @@
 #include "notes.h"
 #include "wav.h"
 
+int16_t *raw_PCM;
+
 int dats_create_wav(void){
    wav_header_struct wav_struct;
 
