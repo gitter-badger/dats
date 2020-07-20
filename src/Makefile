@@ -1,12 +1,13 @@
 
-BIFLEX = parser.tab.c parser.tab.h lex.yy.c
-OBJECTS := $(patsubst %.c, %.o, wav.c parser.tab.c lex.yy.c)
-CFLAGS = -Wall -Wextra -Wtraditional
+BIFLEX = parser.tab.c lex.yy.c
+BIFLEXH = parser.tab.h
+OBJECTS := $(patsubst %.c, %.o, wav.c $(BIFLEX) dats.c)
+CFLAGS = -Wall -Wextra
 
 all : $(BIFLEX) dats
 .PHONY : all
 
-$(BIFLEX) : parser.y lexer.l
+$(BIFLEX) $(BIFLEXH): parser.y lexer.l
 	bison -d parser.y
 	flex lexer.l
 
@@ -17,5 +18,5 @@ dats : $(OBJECTS)
 	$(CC) $^ -O3 $(CFLAGS) -lm -o $@
 
 .PHONY : clean
-clean: $(OBJECTS) $(BIFLEX) dats
-	rm -f $^
+clean: $(BIFLEX) $(BIFLEXH) dats
+	rm -f $^ *.o

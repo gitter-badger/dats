@@ -95,14 +95,13 @@
 #include "notes.h"
 #include "wav.h"
 
-extern FILE *yyin;
 extern int yylex();
-extern int yyparse();
-extern uint32_t dats_line;
 
 void dats_clean(void);
 int yyerror(const char *s);
-int bpm_flag;
+
+static int bpm_flag;
+static int dats_line;
 
 double    WAV_BPM;
 double    FREQUENCY;
@@ -112,7 +111,7 @@ uint32_t  WAV_ALLOC;
 
 int16_t *raw_PCM;
 
-#line 116 "parser.tab.c"
+#line 115 "parser.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -183,12 +182,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 49 "parser.y"
+#line 48 "parser.y"
 
    double dddouble;
    int ddint;
 
-#line 192 "parser.tab.c"
+#line 191 "parser.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -620,8 +619,8 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    65,    65,    67,    68,    70,    77,    82,    90,    91,
-      92,    93,    94,    95,    96,    98
+       0,    64,    64,    66,    67,    69,    76,    81,    89,    90,
+      91,    92,    93,    94,    95,    97
 };
 #endif
 
@@ -1588,19 +1587,19 @@ yyreduce:
   switch (yyn)
     {
   case 3:
-#line 67 "parser.y"
+#line 66 "parser.y"
                                                        {dats_construct_pcm();}
-#line 1594 "parser.tab.c"
+#line 1593 "parser.tab.c"
     break;
 
   case 4:
-#line 68 "parser.y"
+#line 67 "parser.y"
                                                         {dats_construct_pcm();}
-#line 1600 "parser.tab.c"
+#line 1599 "parser.tab.c"
     break;
 
   case 5:
-#line 70 "parser.y"
+#line 69 "parser.y"
       {
 if (bpm_flag == 0) {
    printf("warning; BPM is set to 120\n");
@@ -1608,20 +1607,20 @@ if (bpm_flag == 0) {
    WAV_BPM_PERIOD = 60.0*WAV_SAMPLE_RATE/WAV_BPM;
 } 
 bpm_flag = 1;}
-#line 1612 "parser.tab.c"
+#line 1611 "parser.tab.c"
     break;
 
   case 6:
-#line 77 "parser.y"
+#line 76 "parser.y"
                            {
 WAV_BPM = (yyvsp[-1].dddouble);
 WAV_BPM_PERIOD = 60.0*WAV_SAMPLE_RATE/WAV_BPM;
 bpm_flag = 1;}
-#line 1621 "parser.tab.c"
+#line 1620 "parser.tab.c"
     break;
 
   case 7:
-#line 82 "parser.y"
+#line 81 "parser.y"
                     {
 WAV_ALLOC += WAV_BPM_PERIOD*4/(double)(yyvsp[0].ddint);
 raw_PCM = realloc(raw_PCM, sizeof(int16_t)*WAV_ALLOC);
@@ -1629,59 +1628,59 @@ raw_PCM = realloc(raw_PCM, sizeof(int16_t)*WAV_ALLOC);
 printf("nl %d at line %d\n", (yyvsp[0].ddint), dats_line);
 #endif /*DATS_DEBUG*/
 }
-#line 1633 "parser.tab.c"
+#line 1632 "parser.tab.c"
     break;
 
   case 8:
-#line 90 "parser.y"
+#line 89 "parser.y"
              {FREQUENCY = 16.35159783;}
-#line 1639 "parser.tab.c"
+#line 1638 "parser.tab.c"
     break;
 
   case 9:
-#line 91 "parser.y"
+#line 90 "parser.y"
      {FREQUENCY = 18.35404799;}
-#line 1645 "parser.tab.c"
+#line 1644 "parser.tab.c"
     break;
 
   case 10:
-#line 92 "parser.y"
+#line 91 "parser.y"
      {FREQUENCY = 20.60172231;}
-#line 1651 "parser.tab.c"
+#line 1650 "parser.tab.c"
     break;
 
   case 11:
-#line 93 "parser.y"
+#line 92 "parser.y"
      {FREQUENCY = 21.82676446;}
-#line 1657 "parser.tab.c"
+#line 1656 "parser.tab.c"
     break;
 
   case 12:
-#line 94 "parser.y"
+#line 93 "parser.y"
      {FREQUENCY = 24.49971475;}
-#line 1663 "parser.tab.c"
+#line 1662 "parser.tab.c"
     break;
 
   case 13:
-#line 95 "parser.y"
+#line 94 "parser.y"
      {FREQUENCY = 27.50;}
-#line 1669 "parser.tab.c"
+#line 1668 "parser.tab.c"
     break;
 
   case 14:
-#line 96 "parser.y"
+#line 95 "parser.y"
      {FREQUENCY = 30.86770633;}
-#line 1675 "parser.tab.c"
+#line 1674 "parser.tab.c"
     break;
 
   case 15:
-#line 98 "parser.y"
+#line 97 "parser.y"
                {FREQUENCY *= pow(2, (yyvsp[0].ddint));}
-#line 1681 "parser.tab.c"
+#line 1680 "parser.tab.c"
     break;
 
 
-#line 1685 "parser.tab.c"
+#line 1684 "parser.tab.c"
 
       default: break;
     }
@@ -1911,37 +1910,9 @@ yyreturn:
   return yyresult;
 }
 
-#line 99 "parser.y"
+#line 98 "parser.y"
 
 
-int main(int argc, char *argv[]){
-
- 
-   if (argc < 2) {
-      yyin = stdin;
-      goto parse;
-
-   }
-
-   if (!(yyin = fopen(argv[1], "r"))) {
-      perror(argv[1]);
-      return 1;
-
-   }
-
-   parse:
-   WAV_SAMPLE_RATE = 44100;
-   yyparse();
-
-#ifdef DATS_DEBUG   
-   printf("size of wav %d bytes. period bpm %f\n", 2*WAV_ALLOC, WAV_BPM_PERIOD);
-#endif
-
-   fclose(yyin);
-   dats_create_wav();
-
-   return 0;
-}
 
 int yyerror(const char *s){
    fprintf(stderr, "parser: %s at line %d\n", s, dats_line);

@@ -28,14 +28,13 @@
 #include "notes.h"
 #include "wav.h"
 
-extern FILE *yyin;
 extern int yylex();
-extern int yyparse();
-extern uint32_t dats_line;
 
 void dats_clean(void);
 int yyerror(const char *s);
-int bpm_flag;
+
+static int bpm_flag;
+static int dats_line;
 
 double    WAV_BPM;
 double    FREQUENCY;
@@ -98,34 +97,6 @@ note_key : C {FREQUENCY = 16.35159783;}
 octave : VALUE {FREQUENCY *= pow(2, $1);}
 %%
 
-int main(int argc, char *argv[]){
-
- 
-   if (argc < 2) {
-      yyin = stdin;
-      goto parse;
-
-   }
-
-   if (!(yyin = fopen(argv[1], "r"))) {
-      perror(argv[1]);
-      return 1;
-
-   }
-
-   parse:
-   WAV_SAMPLE_RATE = 44100;
-   yyparse();
-
-#ifdef DATS_DEBUG   
-   printf("size of wav %d bytes. period bpm %f\n", 2*WAV_ALLOC, WAV_BPM_PERIOD);
-#endif
-
-   fclose(yyin);
-   dats_create_wav();
-
-   return 0;
-}
 
 int yyerror(const char *s){
    fprintf(stderr, "parser: %s at line %d\n", s, dats_line);
