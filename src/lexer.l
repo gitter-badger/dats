@@ -1,11 +1,11 @@
-%option noyywrap
+%option noyywrap nounput
 
 %{
 #include <stdio.h>
 #include <stdint.h>
 #include <math.h>
 
-#include "dats.tab.h"
+#include "parser.tab.h"
 #include "notes.h"
 
 #define YY_DECL int yylex()

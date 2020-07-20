@@ -1,4 +1,6 @@
 %define parse.error verbose
+%locations
+
 %{
 /*  Copyright (c) 2020 Al-buharie Amjari <healer.harie@gmail.com>
  *
@@ -62,8 +64,8 @@ int16_t *raw_PCM;
 %%
 S : BEG notes END
  ;
-notes : bpm NOTE note_length note_key octave SEMICOLON {dats_construct_pcm(0);}
- | notes bpm NOTE note_length note_key octave SEMICOLON {dats_construct_pcm(0);}
+notes : bpm NOTE note_length note_key octave SEMICOLON {dats_construct_pcm();}
+ | notes bpm NOTE note_length note_key octave SEMICOLON {dats_construct_pcm();}
  ;
 bpm : {
 if (bpm_flag == 0) {

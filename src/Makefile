@@ -1,19 +1,20 @@
 
-BIFLEX = dats.tab.c dats.tab.h lex.yy.c
-OBJECTS := $(patsubst %.c, %.o, wav.c dats.tab.c lex.yy.c) 
+BIFLEX = parser.tab.c parser.tab.h lex.yy.c
+OBJECTS := $(patsubst %.c, %.o, wav.c parser.tab.c lex.yy.c)
+CFLAGS = -Wall -Wextra -Wtraditional
 
 all : $(BIFLEX) dats
 .PHONY : all
 
-$(BIFLEX) : dats.y dats.l
-	bison -d dats.y
-	flex dats.l
+$(BIFLEX) : parser.y lexer.l
+	bison -d parser.y
+	flex lexer.l
 
 $(OBJECTS): %.o : %.c $(wildcard ../include/*.h)
-	$(CC) -c -I../include -O3 -o $@ $<
+	$(CC) -c -I../include -O3 $(CFLAGS) -o $@ $<
 
 dats : $(OBJECTS)
-	$(CC) -o $@ $^ -O3 -lm
+	$(CC) $^ -O3 $(CFLAGS) -lm -o $@
 
 .PHONY : clean
 clean: $(OBJECTS) $(BIFLEX) dats

@@ -34,10 +34,10 @@ int dats_create_wav(void){
    wav_struct.ByteRate = (uint32_t) wav_struct.SampleRate*wav_struct.NumChannels*BitsPerSample/8;
    wav_struct.BlockAlign = (uint16_t) wav_struct.NumChannels*BitsPerSample/8;
    wav_struct.BitsPerSample = BitsPerSample;
-   wav_struct.Subchunk2Size = (uint32_t) WAV_ALLOC*wav_struct.NumChannels*BitsPerSample/8;
+   wav_struct.Subchunk2Size = (uint32_t) NumSamples*wav_struct.NumChannels*BitsPerSample/8;
 
    fwrite(&wav_struct, sizeof(wav_struct), 1, fp);
-   fwrite(raw_PCM, sizeof(int16_t), WAV_ALLOC, fp);
+   fwrite(raw_PCM, sizeof(int16_t), NumSamples, fp);
 
    uint32_t filesize = ftell(fp) - 8;
    fseek(fp, 4, SEEK_SET);
@@ -51,8 +51,8 @@ int dats_create_wav(void){
    return 0;
 }
 
-void dats_construct_pcm(double frequency){
-   static int i = 0;
+void dats_construct_pcm(void){
+   static uint32_t i = 0;
    int b = 0;
    if (raw_PCM == NULL) {
       fprintf(stderr, "allocating sound failed\n");

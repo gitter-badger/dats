@@ -19,7 +19,7 @@ typedef struct __attribute__((__packed__)) {
 } wav_header_struct;
 
 
-void dats_construct_pcm(double frequency);
+void dats_construct_pcm(void);
 
 int dats_create_wav(void);
 
