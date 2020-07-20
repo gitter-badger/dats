@@ -10,6 +10,9 @@
 
 #define YY_DECL int yylex()
 uint32_t dats_line = 1;
+
+double FREQUENCY;
+
 %}
 
 %s bpm

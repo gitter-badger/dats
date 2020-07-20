@@ -1,19 +1,19 @@
 CC = gcc
-OBJ = dats.tab.o lex.yy.o wav.o
+OBJ := $(patsubst %.c, %.o, $(wildcard *.c))
 BIFLEX = dats.tab.c dats.tab.h lex.yy.c
 
-all : $(BIFLEX) dats
+all : $(BIFLEX) $(OBJ) dats
 .PHONY : all
 
 $(BIFLEX) : dats.y dats.l
 	bison -d dats.y
 	flex dats.l
 
-%.o : %.c ../include/wav.h ../include/notes.h
+$(OBJ): %.o : %.c ../include/wav.h ../include/notes.h
 	$(CC) -c -I../include -O3 -o $@ $<
 
 dats : $(OBJ)
-	$(CC) -o $@ $^ -lfl  -ggdb3 -O3 -lm
+	$(CC) -o $@ $^ -O3 -lm
 
 .PHONY : clean
 clean: $(OBJ) $(BIFLEX) dats

@@ -1,6 +1,8 @@
 #ifndef DATS_NOTE
 #define DATS_NOTE
 
+#define REMOVE_NOTES
+#ifndef REMOVE_NOTES
 #define NOTE_C1 (double) 32.70
 #define NOTE_D1 (double) 36.71
 #define NOTE_E1 (double) 41.20
@@ -40,16 +42,17 @@
 #define NOTE_G5 (double) 783.99
 #define NOTE_A5 (double) 880.00
 #define NOTE_B5 (double) 987.76
+#endif /*REMOVE_NOTES*/
 
-double   WAV_BPM;
-double   FREQUENCY;
-double   WAV_BPM_PERIOD;
-uint32_t WAV_ALLOC;
-uint32_t WAV_SAMPLE_RATE;
-uint32_t WAV_TIME;
+extern double    WAV_BPM;
+extern double    FREQUENCY;
+extern double    WAV_BPM_PERIOD;
+extern uint32_t  WAV_ALLOC;
+extern uint32_t  WAV_SAMPLE_RATE;
+extern uint32_t  WAV_TIME;
 
 
 
-int16_t *raw_PCM;
+extern int16_t *raw_PCM;
 
 #endif

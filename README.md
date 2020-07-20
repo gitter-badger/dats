@@ -27,9 +27,6 @@ Once executed, dats's output is a wav file named "write.wav" playing
 the text sheet.  For the moment, the default soundfont is a sine
 wave. Technically, the attenuation of a sine wave.
 
-To test dats, execute `./dats example.dats`.
-Both would work anyhow.
-
 ## TODO
 - [ ] Able to export midi files
 

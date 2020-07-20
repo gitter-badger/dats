@@ -34,6 +34,14 @@ extern uint32_t dats_line;
 void dats_clean(void);
 int yyerror(const char *s);
 int bpm_flag;
+
+double    WAV_BPM;
+double    FREQUENCY;
+double    WAV_BPM_PERIOD;
+uint32_t  WAV_SAMPLE_RATE;
+uint32_t  WAV_ALLOC;
+
+int16_t *raw_PCM;
 %}
 
 %union {

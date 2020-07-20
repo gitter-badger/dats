@@ -1,7 +1,7 @@
 
 BEGIN
 
-BPM 170;
+BPM 160;
 
 //Measure 1
 NOTE 8 C4;
