@@ -1,3 +1,10 @@
+
+#ifdef DEFINE_WAV_VARIABLES
+#define EXTERN
+#else
+#define EXTERN extern
+#endif
+
 #ifndef DATS_WAV
 #define DATS_WAV
 
@@ -18,10 +25,17 @@ typedef struct __attribute__((__packed__)) {
 
 } wav_header_struct;
 
+extern int dats_create_wav(void);
 
-void dats_construct_pcm(void);
+EXTERN int16_t *raw_pcm;
 
-int dats_create_wav(void);
+
+EXTERN double    WAV_BPM;
+EXTERN double    FREQUENCY;
+EXTERN double    WAV_BPM_PERIOD;
+EXTERN uint32_t  WAV_ALLOC;
+EXTERN uint32_t  WAV_SAMPLE_RATE;
+EXTERN uint32_t  WAV_TIME;
 
 
 #endif

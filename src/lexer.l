@@ -3,19 +3,26 @@
 %{
 #include <stdio.h>
 #include <stdint.h>
+#include <dlfcn.h>
+#include <string.h>
 #include <math.h>
 
 #include "parser.tab.h"
-#include "notes.h"
+#include "wav.h"
+#include "dats.h"
 
-#define YY_DECL int yylex()
-uint32_t dats_line = 1;
+//#define YY_DECL int yylex();
+static int dats_line = 1;
+static char func_name[50];
+static char lib_name[30];
 
 double FREQUENCY;
 
 %}
 
 %s bpm
+%s use_lib
+%s use_func
 
 %%
 
@@ -25,6 +32,27 @@ double FREQUENCY;
 "END"               {return END;}
 "NOTE"              {return NOTE;}
 
+"use"               {BEGIN(use_lib); return USE;}
+
+<use_lib>[a-zA-Z0-9\/\._]+ {strcpy(lib_name,yytext);
+                     handle = dlopen(yytext,RTLD_NOW);
+                     if (!handle){fprintf(stderr, "%s: no such plugin\n%s\n",
+                        yytext, dlerror()); free(raw_pcm);exit(1);}
+                     BEGIN(INITIAL);
+                     BEGIN(use_func);
+                     return LIB;}
+
+<use_func>[a-z]+ {
+*(int**)(&dats_create_pcm) = dlsym(handle, yytext);
+                        if (!dats_create_pcm){fprintf(stderr,
+                           "%s: no such function from %s\n"
+                           "%s\n", yytext, lib_name, dlerror());
+                           dlclose(handle);
+			   free(raw_pcm);
+			   exit(1);
+			}
+			BEGIN(INITIAL);
+			return FUNC;}
 "C"                 {
 #ifdef DATS_DEBUG
 printf("found C\n");
@@ -37,7 +65,7 @@ printf("found D\n");
                      return D;}
 "E"                 {
 #ifdef DATS_DEBUG
-printf("found E\n");i
+printf("found E\n");
 #endif
                      return E;}
 "F"                 {

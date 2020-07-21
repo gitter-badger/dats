@@ -4,10 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "notes.h"
 #include "wav.h"
-
-int16_t *raw_PCM;
 
 int dats_create_wav(void){
    wav_header_struct wav_struct;
@@ -15,7 +12,7 @@ int dats_create_wav(void){
    FILE *fp = fopen("write.wav", "wb+");
    if (!fp){
       fprintf(stderr, "Couldn't create file!\n");
-      free(raw_PCM);
+      free(raw_pcm);
       return 1;
    }
 
@@ -37,7 +34,7 @@ int dats_create_wav(void){
    wav_struct.Subchunk2Size = (uint32_t) NumSamples*wav_struct.NumChannels*BitsPerSample/8;
 
    fwrite(&wav_struct, sizeof(wav_struct), 1, fp);
-   fwrite(raw_PCM, sizeof(int16_t), NumSamples, fp);
+   fwrite(raw_pcm, sizeof(int16_t), NumSamples, fp);
 
    uint32_t filesize = ftell(fp) - 8;
    fseek(fp, 4, SEEK_SET);
@@ -47,10 +44,11 @@ int dats_create_wav(void){
 
 
 
-   free(raw_PCM);
+   free(raw_pcm);
    return 0;
 }
 
+#if 0
 void dats_construct_pcm(void){
    static uint32_t i = 0;
    int b = 0;
@@ -68,3 +66,5 @@ void dats_construct_pcm(void){
       raw_PCM[i] = (pow(M_E, -b*periodw*3)*23000.0*sin(2.0*M_PI*FREQUENCY*b*periodw))+pow(M_E, -b*periodw*3)*10000.0*cos(M_PI*FREQUENCY*(b+1.8)*periodw);
    }
 }
+
+#endif

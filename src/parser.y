@@ -24,9 +24,10 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <math.h>
+#include <dlfcn.h>
 
-#include "notes.h"
 #include "wav.h"
+#include "dats.h"
 
 extern int yylex();
 
@@ -42,7 +43,7 @@ double    WAV_BPM_PERIOD;
 uint32_t  WAV_SAMPLE_RATE;
 uint32_t  WAV_ALLOC;
 
-int16_t *raw_PCM;
+int16_t *raw_pcm;
 %}
 
 %union {
@@ -51,39 +52,57 @@ int16_t *raw_PCM;
 }
 
 %token BEG BPM NOTE END
-%token C D E F G A B 
+%token C D E F G A B
+%token USE LIB FUNC
 
 %token <ddint> VALUE
 %token <dddouble> BPM_VALUE
-%token NL_1 NL_2 NL_4 NL_8 NL_16
 %token SEMICOLON
 
 %start S
 
 %%
-S : BEG notes END
+S : prerequisite BEG notes END
  ;
-notes : bpm NOTE note_length note_key octave SEMICOLON {dats_construct_pcm();}
- | notes bpm NOTE note_length note_key octave SEMICOLON {dats_construct_pcm();}
+prerequisite : {
+printf("warning: using sine from libpsg\n");
+handle = dlopen("../plugins/libpsg.so", RTLD_NOW);
+if (!handle) {
+   fprintf(stderr, "../plugins/libpsg.so: no such file\n%s\n",
+   dlerror());
+   exit(1);
+}
+*(int**)(&dats_create_pcm) = dlsym(handle, "sine");
+if (!dats_create_pcm) {
+   fprintf(stderr, "sine: no such function\n%s\n",
+   dlerror());
+   exit(1);
+}
+}
+ | USE LIB FUNC
+ ;
+notes : bpm NOTE note_length note_key octave SEMICOLON {dats_create_pcm();}
+ | notes bpm NOTE note_length note_key octave SEMICOLON {dats_create_pcm();}
  ;
 bpm : {
 if (bpm_flag == 0) {
    printf("warning; BPM is set to 120\n");
-   WAV_BPM = 120;
+   WAV_BPM        = 120;
    WAV_BPM_PERIOD = 60.0*WAV_SAMPLE_RATE/WAV_BPM;
+   bpm_flag = 1;
 } 
-bpm_flag = 1;}
+;}
  | BPM BPM_VALUE SEMICOLON {
-WAV_BPM = $2;
+WAV_BPM        = $2;
 WAV_BPM_PERIOD = 60.0*WAV_SAMPLE_RATE/WAV_BPM;
 bpm_flag = 1;}
  ;
 note_length : VALUE {
 WAV_ALLOC += WAV_BPM_PERIOD*4/(double)$1;
-raw_PCM = realloc(raw_PCM, sizeof(int16_t)*WAV_ALLOC);
+raw_pcm    = realloc(raw_pcm, sizeof(int16_t)*WAV_ALLOC);
 #ifdef DATS_DEBUG
-printf("nl %d at line %d\n", $1, dats_line);
-#endif /*DATS_DEBUG*/
+printf("nl %d at line", $1);
+#endif
 }
  ;
 note_key : C {FREQUENCY = 16.35159783;}
@@ -99,11 +118,11 @@ octave : VALUE {FREQUENCY *= pow(2, $1);}
 
 
 int yyerror(const char *s){
-   fprintf(stderr, "parser: %s at line %d\n", s, dats_line);
+   fprintf(stderr, "parser: %s\n", s);
    dats_clean();
    exit(1);
 }
 
 void dats_clean(void){
-   free(raw_PCM);
+   free(raw_pcm);
 }

@@ -1,11 +1,15 @@
 #include <stdio.h>
 #include <getopt.h>
+#include <dlfcn.h>
 
-#include "notes.h"
 #include "wav.h"
+#include "dats.h"
 
 extern int yyparse();
 extern FILE *yyin;
+
+int (*dats_create_pcm)();
+void *handle;
 
 int main(int argc, char *argv[]){
  
@@ -21,6 +25,7 @@ int main(int argc, char *argv[]){
 
    }
 
+
    parse:
    WAV_SAMPLE_RATE = 44100;
    yyparse();
@@ -30,6 +35,7 @@ int main(int argc, char *argv[]){
        2*WAV_ALLOC, WAV_BPM_PERIOD);
 #endif
 
+   dlclose(handle);
    fclose(yyin);
    dats_create_wav();
 

@@ -12,10 +12,10 @@ $(BIFLEX) $(BIFLEXH): parser.y lexer.l
 	flex lexer.l
 
 $(OBJECTS): %.o : %.c $(wildcard ../include/*.h)
-	$(CC) -c -I../include -O3 $(CFLAGS) -o $@ $<
+	$(CC) -c -I../include -O3 -DDATS_DEBUG -g $(CFLAGS) -o $@ $<
 
 dats : $(OBJECTS)
-	$(CC) $^ -O3 $(CFLAGS) -lm -o $@
+	$(CC) $^ -O3 $(CFLAGS) -lm -DDATS_DEBUG -o $@
 
 .PHONY : clean
 clean: $(BIFLEX) $(BIFLEXH) dats
