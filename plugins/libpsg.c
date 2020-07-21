@@ -1,8 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <stdint.h>
 
-#define DEFINE_WAV_VARIABLES
+//fine DEFINE_WAV_VARIABLES
 #include "wav.h"
 
 #include "plugh.h"
@@ -21,7 +22,7 @@ struct plugin_info stdpsg = {
 
 };
 
-int sine(){
+void sine(void){
    static uint32_t i = 0;
    auto size_t b = 0;
 
@@ -33,8 +34,7 @@ int sine(){
    double periodw = (double) 1.0/WAV_SAMPLE_RATE;
 
    for (; i < WAV_ALLOC; i++, b++){
-      raw_pcm[i] = (pow(M_E, -b*periodw*3)*23000.0*sin(2.0*M_PI*
-      FREQUENCY*b*periodw))+pow(M_E, -b*periodw*3)*10000.0*
-      cos(M_PI*FREQUENCY*(b+1.8)*periodw);
+      raw_pcm[i] = (int16_t)(10000.0*sin(2.0*FREQUENCY*M_PI*periodw*b));
    }
+   printf("raw_pcm: %p\n", raw_pcm);
 }

@@ -1,4 +1,6 @@
 
+use ../../plugins/libpsg.so sine
+
 BEGIN
 
 BPM 160;

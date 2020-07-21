@@ -25,7 +25,7 @@ typedef struct __attribute__((__packed__)) {
 
 } wav_header_struct;
 
-extern int dats_create_wav(void);
+EXTERN int dats_create_wav(void);
 
 EXTERN int16_t *raw_pcm;
 

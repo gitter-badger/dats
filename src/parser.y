@@ -26,6 +26,7 @@
 #include <math.h>
 #include <dlfcn.h>
 
+#define DEFINE_WAV_VARIABLES
 #include "wav.h"
 #include "dats.h"
 
@@ -35,8 +36,8 @@ void dats_clean(void);
 int yyerror(const char *s);
 
 static int bpm_flag;
-static int dats_line;
 
+#if 0
 double    WAV_BPM;
 double    FREQUENCY;
 double    WAV_BPM_PERIOD;
@@ -44,6 +45,8 @@ uint32_t  WAV_SAMPLE_RATE;
 uint32_t  WAV_ALLOC;
 
 int16_t *raw_pcm;
+
+#endif
 %}
 
 %union {
@@ -68,13 +71,13 @@ prerequisite : {
 printf("warning: using sine from libpsg\n");
 handle = dlopen("../plugins/libpsg.so", RTLD_NOW);
 if (!handle) {
-   fprintf(stderr, "../plugins/libpsg.so: no such file\n%s\n",
+   fprintf(stderr, "%s\n",
    dlerror());
    exit(1);
 }
-*(int**)(&dats_create_pcm) = dlsym(handle, "sine");
+*(void**)(&dats_create_pcm) = dlsym(handle, "sine");
 if (!dats_create_pcm) {
-   fprintf(stderr, "sine: no such function\n%s\n",
+   fprintf(stderr, "%s\n",
    dlerror());
    exit(1);
 }
@@ -100,6 +103,7 @@ bpm_flag = 1;}
 note_length : VALUE {
 WAV_ALLOC += WAV_BPM_PERIOD*4/(double)$1;
 raw_pcm    = realloc(raw_pcm, sizeof(int16_t)*WAV_ALLOC);
+printf("parser raw_pcm: %p\n", raw_pcm);
 #ifdef DATS_DEBUG
 printf("nl %d at line", $1);
 #endif
@@ -114,6 +118,7 @@ note_key : C {FREQUENCY = 16.35159783;}
  | B {FREQUENCY = 30.86770633;}
  ;
 octave : VALUE {FREQUENCY *= pow(2, $1);}
+ ;
 %%
 
 

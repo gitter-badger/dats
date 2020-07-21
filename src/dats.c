@@ -8,7 +8,7 @@
 extern int yyparse();
 extern FILE *yyin;
 
-int (*dats_create_pcm)();
+void (*dats_create_pcm)();
 void *handle;
 
 int main(int argc, char *argv[]){

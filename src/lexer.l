@@ -13,7 +13,6 @@
 
 //#define YY_DECL int yylex();
 static int dats_line = 1;
-static char func_name[50];
 static char lib_name[30];
 
 double FREQUENCY;
@@ -42,7 +41,7 @@ double FREQUENCY;
                      BEGIN(use_func);
                      return LIB;}
 
-<use_func>[a-z]+ {
+<use_func>[a-zA-Z0-9_]+ {
 *(int**)(&dats_create_pcm) = dlsym(handle, yytext);
                         if (!dats_create_pcm){fprintf(stderr,
                            "%s: no such function from %s\n"
