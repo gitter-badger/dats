@@ -103,8 +103,8 @@ bpm_flag = 1;}
 note_length : VALUE {
 WAV_ALLOC += WAV_BPM_PERIOD*4/(double)$1;
 raw_pcm    = realloc(raw_pcm, sizeof(int16_t)*WAV_ALLOC);
-printf("parser raw_pcm: %p\n", raw_pcm);
 #ifdef DATS_DEBUG
+printf("parser raw_pcm: %p\n", raw_pcm);
 printf("nl %d at line", $1);
 #endif
 }

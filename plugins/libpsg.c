@@ -36,5 +36,4 @@ void sine(void){
    for (; i < WAV_ALLOC; i++, b++){
       raw_pcm[i] = (int16_t)(10000.0*sin(2.0*FREQUENCY*M_PI*periodw*b));
    }
-   printf("raw_pcm: %p\n", raw_pcm);
 }

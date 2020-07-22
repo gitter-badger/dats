@@ -37,7 +37,6 @@ double FREQUENCY;
                      handle = dlopen(yytext,RTLD_NOW);
                      if (!handle){fprintf(stderr, "%s: no such plugin\n%s\n",
                         yytext, dlerror()); free(raw_pcm);exit(1);}
-                     BEGIN(INITIAL);
                      BEGIN(use_func);
                      return LIB;}
 
